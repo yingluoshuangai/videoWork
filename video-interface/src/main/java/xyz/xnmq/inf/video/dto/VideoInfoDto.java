@@ -1,5 +1,7 @@
 package xyz.xnmq.inf.video.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+import xyz.xnmq.annototion.Filed;
 import xyz.xnmq.entity.video.VideoInfo;
 
 /**
@@ -9,6 +11,17 @@ import xyz.xnmq.entity.video.VideoInfo;
  */
 public class VideoInfoDto {
     VideoInfo videoInfo = new VideoInfo();
+
+    @Filed("视频文件")
+    private MultipartFile file;//视频文件
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     public Long getUserId() {
         return videoInfo.getUserId();
