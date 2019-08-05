@@ -27,7 +27,7 @@ public class UsersController {
 
     @RequestMapping("uploadFace")
     @ApiOperation(value = "头像上传")
-    public Json uploadFace(String userId, @RequestParam("file") MultipartFile[] files) throws IOException {
+    public Json uploadFace(String userId, @RequestParam("files") MultipartFile[] files) throws IOException {
         return usersService.uploadFace(userId, files);
     }
 

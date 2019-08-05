@@ -32,6 +32,8 @@ public class VideoInfo extends AuditAuto{
     private Long videoHeight;
     @Filed("视频宽度")
     private Long videoWidth;
+    @Filed("视频容量")
+    private Long videoSize;
     @Filed("封面地址")
     private String coverPath;
     @Filed("喜欢数")
@@ -40,6 +42,14 @@ public class VideoInfo extends AuditAuto{
     private int status;
     @Filed("是否禁用 0 使用 1 禁用")
     private int disabled = 0;
+
+    public Long getVideoSize() {
+        return videoSize;
+    }
+
+    public void setVideoSize(Long videoSize) {
+        this.videoSize = videoSize;
+    }
 
     public Long getUserId() {
         return userId;

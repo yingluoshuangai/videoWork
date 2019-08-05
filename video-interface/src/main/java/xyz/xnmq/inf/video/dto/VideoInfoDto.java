@@ -15,6 +15,14 @@ public class VideoInfoDto {
     @Filed("视频文件")
     private MultipartFile file;//视频文件
 
+    public Long getVideoSize() {
+        return videoInfo.getVideoSize();
+    }
+
+    public void setVideoSize(Long videoSize) {
+        videoInfo.setVideoSize(videoSize);
+    }
+
     public MultipartFile getFile() {
         return file;
     }

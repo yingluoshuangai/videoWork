@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.xnmq.entity.video.VideoInfo;
@@ -29,6 +30,8 @@ public class VideoInfoServiceImpl implements VideoInfoService{
     private VideoInfoDao videoInfoDao;
     @Autowired
     private VideoInfoMapper videoInfoMapper;
+    @Value("${file.fileSpace}")
+    private String fileSpace;
 
     /**
      * 视频上传
@@ -36,8 +39,8 @@ public class VideoInfoServiceImpl implements VideoInfoService{
     @Override
     public Json uploadVideo(VideoInfoDto dto) throws Exception{
 
-        String fileSpace = "D://material/video_space";//文件保存的命名空间
-        String uploadPathDB = "/private/" + dto.getUserId() + "/video";//保存到数据库的相对路径
+       // String fileSpace = "D://material/video_space";//文件保存的命名空间
+        String uploadPathDB = "/" + dto.getUserId() + "/video";//保存到数据库的相对路径
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
         MultipartFile file = dto.getFile();

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.xnmq.entity.users.Users;
@@ -34,6 +35,8 @@ import java.util.logging.Logger;
 @Service
 public class UsersServiceImpl implements UsersService {
 
+    @Value("${file.fileSpace}")
+    private String fileSpace;
     @Autowired
     private UsersDao usersDao;
 
@@ -155,9 +158,9 @@ public class UsersServiceImpl implements UsersService {
             return Json.error("用户id不存在");
         }
         //文件保存的命名空间
-        String fileSpace = "D:/material/video_space";
+        //String fileSpace = "D:/material/video_space";
         //保存到数据库的相对路径
-        String uploadPathDB = "/private/" + userId + "/face";//
+        String uploadPathDB = "/" + userId + "/face";//
         FileOutputStream fileOutputStream = null;//文件输出流
         InputStream inputStream = null;//输入流
         try {
