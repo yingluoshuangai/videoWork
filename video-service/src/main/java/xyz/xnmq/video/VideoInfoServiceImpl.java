@@ -2,6 +2,8 @@ package xyz.xnmq.video;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,7 @@ import java.util.UUID;
  */
 @Service
 public class VideoInfoServiceImpl implements VideoInfoService{
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private VideoInfoDao videoInfoDao;
     @Autowired
@@ -46,13 +49,15 @@ public class VideoInfoServiceImpl implements VideoInfoService{
      */
     @Override
     public Json uploadVideo(VideoInfoDto dto) throws Exception{
-
-        String uploadPathDB = "/" + dto.getUserId() + "/video/";//保存到数据库的相对路径
-        String videoPath = fileSpace + uploadPathDB;//文件上传的磁盘路径
-        String finalUploadPathDB = "";//原视频保存到数据库的最终路径
-        String finalVideoPath = "";//原视频上传的最终磁盘路径
-        String finalMergeUploadPathDB = "";//合成视频保存到数据库的最终路径
-        String finalMergeVideoOutputPath = "";//合成视频保存到磁盘的最终路径
+        logger.info("-----文件上传开始， start-------");
+        String uploadPathDB = "/" + dto.getUserId() + "/video/";//保存到数据库的相对路径  /5/video/
+        String videoPath = fileSpace + uploadPathDB;//文件上传的磁盘路径  D://material/video_space/private/5/video/
+        String finalUploadPathDB = "";//原视频保存到数据库的最终路径  /5/video/xxx.mp4
+        String finalVideoPath = "";//原视频上传的最终磁盘路径  D://material/video_space/private/5/video/xxx.mp4
+        String finalMergeUploadPathDB = "";//合成视频保存到数据库的最终路径  /5/video/merge_xxx.mp4
+        String finalMergeVideoOutputPath = "";//合成视频保存到磁盘的最终路径  D://material/video_space/private/5/video/merge_xxx.mp4
+        String finalCoverUploadPathDB = ""; //视频封面的最终数据库路径
+        String finalCoverPath = "";//视频封面的最终磁盘路径
 
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
@@ -63,6 +68,7 @@ public class VideoInfoServiceImpl implements VideoInfoService{
             String fileName = file.getOriginalFilename();//获得文件名
             if(StringUtils.isNotEmpty(fileName)){
 
+                finalUploadPathDB = uploadPathDB + fileName;
                 finalVideoPath = videoPath + fileName;//原文件上传的最终磁盘路径
 
                 File outFile = new File(finalVideoPath);
@@ -74,6 +80,8 @@ public class VideoInfoServiceImpl implements VideoInfoService{
                 inputStream = file.getInputStream();
                 IOUtils.copy(inputStream, fileOutputStream);
 
+
+                FfmpegUtil ffmpegUtil = new FfmpegUtil("D:/soft/soft3/ffmpeg/bin/ffmpeg.exe");
                 //合并视频
                 if(dto.getAudioId() != null){
                     Bgm bgm = bgmDao.findOne(dto.getAudioId());
@@ -82,11 +90,18 @@ public class VideoInfoServiceImpl implements VideoInfoService{
                     String outPutFileName = "merge_" + bgm.getId() + "_" + UUID.randomUUID().toString() + "_" + fileName;//合成视频的文件名
                     finalMergeUploadPathDB = uploadPathDB + outPutFileName;//合成视频保存到数据库的最终路径
                     finalMergeVideoOutputPath = videoPath + outPutFileName;//合成视频保存到磁盘的最终路径
-                    FfmpegUtil ffmpegUtil = new FfmpegUtil("D:/soft/soft3/ffmpeg/bin/ffmpeg.exe");
                     ffmpegUtil.mergeVideoAndAudio(videoInputPath, audioInputPath, dto.getVideoDuration(), finalMergeVideoOutputPath);
-
-
                 }
+
+                //截取视频封面
+                String fileNamePrefix = fileName.split("\\.")[0];
+                String coverFileName = fileNamePrefix + ".jpg";
+                finalCoverUploadPathDB = uploadPathDB + coverFileName; //视频封面的最终数据库路径
+                finalCoverPath = videoPath + coverFileName;//视频封面的最终磁盘路径
+                ffmpegUtil.cutVideoCover(finalVideoPath, finalCoverPath);
+
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -102,6 +117,8 @@ public class VideoInfoServiceImpl implements VideoInfoService{
         VideoInfo videoInfo = new VideoInfo();
         BeanUtils.copyProperties(dto, videoInfo);
         videoInfo.setVideoPath(finalMergeUploadPathDB);
+        videoInfo.setCoverPath(finalCoverUploadPathDB);
+        videoInfo.setLinkCounts(0L);
         videoInfoDao.save(videoInfo);
 
         return Json.success();

@@ -29,7 +29,7 @@ public class LoginController {
 
     @RequestMapping("findList")
     public Json findList(){
-        List<Users> usersList = usersService.findList();
+        //List<Users> usersList = usersService.findList();
         List<UsersDto> usersDtoList = usersService.findDtoList();
         return Json.success(usersDtoList);
     }

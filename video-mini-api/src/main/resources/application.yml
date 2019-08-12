@@ -20,7 +20,9 @@ spring:
 
 mybatis: # mybatis 配置
   type-aliases-package: xyz.xnmq.inf.*.mapper # mapper文件位置，还需要配置@Mapper或者@MapperScan注解使用
-  mapper-locations: classpath:mybatis/mapper/*/*.xml # xml文件位置
+  mapper-locations: classpath:mybatis/mapper/*/*.xml
+
+
 
 
 

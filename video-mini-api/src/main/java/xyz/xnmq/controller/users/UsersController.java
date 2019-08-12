@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import xyz.xnmq.inf.users.UsersService;
 import xyz.xnmq.json.Json;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @Author: by xnmq
@@ -28,6 +29,12 @@ public class UsersController {
     @RequestMapping("uploadFace")
     @ApiOperation(value = "头像上传")
     public Json uploadFace(String userId, @RequestParam("files") MultipartFile[] files) throws IOException {
+        if (Objects.isNull(files) || files.length <= 0) {
+            return Json.error("文件不存在");
+        }
+        if(StringUtils.isEmpty(userId)){
+            return Json.error("用户id不存在");
+        }
         return usersService.uploadFace(userId, files);
     }
 

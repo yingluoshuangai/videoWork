@@ -150,17 +150,12 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public Json uploadFace(String userId, MultipartFile[] files) {
-        //文件保存规则 : 头像--用户id/face/图片  视频-- 用户id/voide/视频
-        if (Objects.isNull(files) || files.length <= 0) {
-            return Json.error("文件不存在");
-        }
-        if(StringUtils.isEmpty(userId)){
-            return Json.error("用户id不存在");
-        }
-        //文件保存的命名空间
-        //String fileSpace = "D:/material/video_space";
-        //保存到数据库的相对路径
-        String uploadPathDB = "/" + userId + "/face";//
+
+        String uploadPathDB = "/" + userId + "/face/";//保存到数据库的相对路径
+        String facePath = fileSpace + uploadPathDB;//文件上传的磁盘路径
+        String finalUploadPathDB = "";//保存到数据库的最终相对路径
+        String finalFacePath = "";//文件上传的最终磁盘路径
+
         FileOutputStream fileOutputStream = null;//文件输出流
         InputStream inputStream = null;//输入流
         try {
@@ -168,9 +163,9 @@ public class UsersServiceImpl implements UsersService {
             String fileName = files[0].getOriginalFilename();//获得文件名
             if (StringUtils.isNotEmpty(fileName)) {
                 //文件上传的最终保存路径
-                String finalFacePath = fileSpace + uploadPathDB + "/" + fileName;
+                 finalFacePath = facePath + fileName;
                 //保存到数据库的最终路径
-                uploadPathDB = uploadPathDB + "/" + fileName;
+                finalUploadPathDB = uploadPathDB + fileName;
 
                 File outFile = new File(finalFacePath);
                 if (!outFile.getParentFile().exists()) {//父文件夹不存在
@@ -184,7 +179,7 @@ public class UsersServiceImpl implements UsersService {
 
                 //保存用户头像地址
                 Users users = usersDao.findOne(Long.valueOf(userId));
-                users.setFaceImage(uploadPathDB);
+                users.setFaceImage(finalUploadPathDB);
                 usersDao.save(users);
 
             }
@@ -201,7 +196,7 @@ public class UsersServiceImpl implements UsersService {
                 e.printStackTrace();
             }
         }
-        return Json.success(uploadPathDB);//返回头像路径
+        return Json.success(finalUploadPathDB);//返回头像路径
     }
 
     /**
