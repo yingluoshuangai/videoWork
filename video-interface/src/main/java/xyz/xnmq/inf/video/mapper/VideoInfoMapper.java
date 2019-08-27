@@ -1,6 +1,10 @@
 package xyz.xnmq.inf.video.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import xyz.xnmq.inf.video.dto.VideoInfoDto;
+
+import java.util.List;
 
 /**
  * @Author: by xnmq
@@ -9,4 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface VideoInfoMapper {
+
+    List<VideoInfoDto> findList(@Param("dto") VideoInfoDto dto);
 }

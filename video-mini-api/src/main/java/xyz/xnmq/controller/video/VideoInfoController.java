@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import xyz.xnmq.inf.video.VideoInfoService;
 import xyz.xnmq.inf.video.dto.VideoInfoDto;
 import xyz.xnmq.json.Json;
+import xyz.xnmq.mybatis.Page;
 
 import java.util.Objects;
 
@@ -32,6 +33,19 @@ public class VideoInfoController {
         }
         return videoInfoService.uploadVideo(dto);
 
+    }
+
+    @RequestMapping("findList")
+    public Json findList(VideoInfoDto dto, Page page){
+        return Json.success(videoInfoService.findList(dto,page));
+    }
+
+    @RequestMapping("findByDesc")
+    public Json findByDesc(VideoInfoDto dto, Page page){
+        if(Objects.isNull(dto.getUserId())){
+            return Json.error("用户id不能为空");
+        }
+        return Json.success(videoInfoService.findByDesc(dto, page));
     }
 
 

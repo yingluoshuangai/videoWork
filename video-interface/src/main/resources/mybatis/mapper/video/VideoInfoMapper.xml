@@ -2,5 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="xyz.xnmq.inf.video.mapper.VideoInfoMapper">
 
+    <select id="findList" resultType="xyz.xnmq.inf.video.dto.VideoInfoDto">
+        select b.face_image as faceImage, b.username, b.nickname,
+        a.id,a.audio_id as audioId, a.cover_path as coverPath,
+        a.video_path as videoPath
+        from video_info a
+        left join users	b on a.user_id = b.id
+	  	where a.disabled = 0
+	  	<if test="dto.status != null and dto.status != ''">
+            and a.status = #{dto.status}
+        </if>
+        <if test="dto.videoDesc != null and dto.videoDesc != ''">
+            and a.video_desc like concat('%', concat(#{dto.videoDesc}, '%'))
+        </if>
+        order by a.create_time DESC
+    </select>
+
 
 </mapper>

@@ -1,5 +1,7 @@
 package xyz.xnmq.video;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -9,15 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import xyz.xnmq.entity.users.UserSearchRecord;
 import xyz.xnmq.entity.video.Bgm;
 import xyz.xnmq.entity.video.VideoInfo;
 import xyz.xnmq.ffmpeg.FfmpegUtil;
+import xyz.xnmq.inf.users.dao.UserSearchRecordDao;
 import xyz.xnmq.inf.video.VideoInfoService;
 import xyz.xnmq.inf.video.dao.BgmDao;
 import xyz.xnmq.inf.video.dao.VideoInfoDao;
 import xyz.xnmq.inf.video.dto.VideoInfoDto;
 import xyz.xnmq.inf.video.mapper.VideoInfoMapper;
 import xyz.xnmq.json.Json;
+import xyz.xnmq.mybatis.Page;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +44,9 @@ public class VideoInfoServiceImpl implements VideoInfoService{
     private VideoInfoMapper videoInfoMapper;
     @Autowired
     private BgmDao bgmDao;
+    @Autowired
+    private UserSearchRecordDao userSearchRecordDao;
+
     @Value("${file.fileSpace}")
     private String fileSpace;
     @Value("${file.bgmPath}")
@@ -123,5 +131,39 @@ public class VideoInfoServiceImpl implements VideoInfoService{
 
         return Json.success();
 
+    }
+
+
+    /**
+     * 分页查询
+     * @param dto
+     * @param page
+     * @return
+     */
+    @Override
+    public PageInfo findList(VideoInfoDto dto, Page page){
+        dto.setStatus(0);//查询未禁播视频
+        PageHelper.startPage(page.getPageNum(),page.getPageSize());
+        return new PageInfo(videoInfoMapper.findList(dto));
+    }
+
+    /**
+     * 通过视频描述， 查询视频
+     * @param dto
+     * @param page
+     * @return
+     */
+    @Override
+    public PageInfo findByDesc(VideoInfoDto dto, Page page){
+        //添加查询记录
+        UserSearchRecord userSearchRecord = new UserSearchRecord();
+        userSearchRecord.setUserId(dto.getUserId());
+        userSearchRecord.setContent(dto.getVideoDesc());
+        userSearchRecordDao.save(userSearchRecord);
+
+        //查询
+        dto.setStatus(0);
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        return new PageInfo(videoInfoMapper.findList(dto));
     }
 }

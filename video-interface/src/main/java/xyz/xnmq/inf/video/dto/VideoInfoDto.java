@@ -12,8 +12,41 @@ import xyz.xnmq.entity.video.VideoInfo;
 public class VideoInfoDto {
     VideoInfo videoInfo = new VideoInfo();
 
+    @Filed("用户名")
+    private String username;
+    @Filed("用户昵称")
+    private String nickname;
+    @Filed("用户头像")
+    private String faceImage;
+
+
     @Filed("视频文件")
     private MultipartFile file;//视频文件
+
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFaceImage() {
+        return faceImage;
+    }
+
+    public void setFaceImage(String faceImage) {
+        this.faceImage = faceImage;
+    }
 
     public Long getVideoSize() {
         return videoInfo.getVideoSize();
