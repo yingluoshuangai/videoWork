@@ -1,5 +1,7 @@
 package xyz.xnmq.inf.users;
 
+import xyz.xnmq.inf.users.dto.UserSearchRecordDto;
+
 import java.util.List;
 
 /**
@@ -9,4 +11,6 @@ import java.util.List;
  */
 public interface UserSearchRecordService {
     List<String> findHotContent();
+
+    void saveRecord(UserSearchRecordDto dto);
 }

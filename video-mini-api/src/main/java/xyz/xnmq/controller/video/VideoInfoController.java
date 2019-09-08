@@ -2,7 +2,9 @@ package xyz.xnmq.controller.video;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.xnmq.inf.video.VideoInfoService;
@@ -36,7 +38,7 @@ public class VideoInfoController {
     }
 
     @RequestMapping("findList")
-    public Json findList(VideoInfoDto dto, Page page){
+    public Json findList(@RequestBody VideoInfoDto dto, Page page){
         return Json.success(videoInfoService.findList(dto,page));
     }
 

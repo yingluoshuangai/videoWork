@@ -1,9 +1,12 @@
 package xyz.xnmq.users;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import xyz.xnmq.entity.users.UserSearchRecord;
 import xyz.xnmq.inf.users.UserSearchRecordService;
 import xyz.xnmq.inf.users.dao.UserSearchRecordDao;
+import xyz.xnmq.inf.users.dto.UserSearchRecordDto;
 import xyz.xnmq.inf.users.mapper.UserSearchRecordMapper;
 
 import java.util.List;
@@ -29,5 +32,17 @@ public class UserSearchRecordServiceImpl  implements UserSearchRecordService{
     public List<String> findHotContent(){
         List<String> contentList = userSearchRecordMapper.findHotContent(5L);
         return contentList;
+    }
+
+    /**
+     * 保存查询记录
+     * @param dto
+     */
+    @Override
+    public void saveRecord(UserSearchRecordDto dto){
+        UserSearchRecord record = new UserSearchRecord();
+        BeanUtils.copyProperties(dto, record);
+        record.setDisabled(0);
+        userSearchRecordDao.save(record);
     }
 }

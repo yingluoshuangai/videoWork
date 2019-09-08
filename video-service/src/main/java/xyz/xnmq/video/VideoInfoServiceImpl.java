@@ -102,7 +102,7 @@ public class VideoInfoServiceImpl implements VideoInfoService{
                 }
 
                 //截取视频封面
-                String fileNamePrefix = fileName.split("\\.")[0];
+                String fileNamePrefix = fileName.split("\\.mp4")[0];
                 String coverFileName = fileNamePrefix + ".jpg";
                 finalCoverUploadPathDB = uploadPathDB + coverFileName; //视频封面的最终数据库路径
                 finalCoverPath = videoPath + coverFileName;//视频封面的最终磁盘路径
