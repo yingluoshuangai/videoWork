@@ -151,7 +151,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Json uploadFace(String userId, MultipartFile[] files) {
 
-        String uploadPathDB = "/" + userId + "/face/";//保存到数据库的相对路径
+        String uploadPathDB = "/face/" + userId + "/";//保存到数据库的相对路径
         String facePath = fileSpace + uploadPathDB;//文件上传的磁盘路径
         String finalUploadPathDB = "";//保存到数据库的最终相对路径
         String finalFacePath = "";//文件上传的最终磁盘路径

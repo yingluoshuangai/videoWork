@@ -58,12 +58,12 @@ public class VideoInfoServiceImpl implements VideoInfoService{
     @Override
     public Json uploadVideo(VideoInfoDto dto) throws Exception{
         logger.info("-----文件上传开始， start-------");
-        String uploadPathDB = "/" + dto.getUserId() + "/video/";//保存到数据库的相对路径  /5/video/
-        String videoPath = fileSpace + uploadPathDB;//文件上传的磁盘路径  D://material/video_space/private/5/video/
-        String finalUploadPathDB = "";//原视频保存到数据库的最终路径  /5/video/xxx.mp4
-        String finalVideoPath = "";//原视频上传的最终磁盘路径  D://material/video_space/private/5/video/xxx.mp4
-        String finalMergeUploadPathDB = "";//合成视频保存到数据库的最终路径  /5/video/merge_xxx.mp4
-        String finalMergeVideoOutputPath = "";//合成视频保存到磁盘的最终路径  D://material/video_space/private/5/video/merge_xxx.mp4
+        String uploadPathDB = "/video/" + dto.getUserId() + "/";//保存到数据库的相对路径  /5/video/
+        String videoPath = fileSpace + uploadPathDB;//文件上传的磁盘路径  D://material/video_space/video/5/
+        String finalUploadPathDB = "";//原视频保存到数据库的最终路径  /video/5/xxx.mp4
+        String finalVideoPath = "";//原视频上传的最终磁盘路径  D://material/video_space/video/5/xxx.mp4
+        String finalMergeUploadPathDB = "";//合成视频保存到数据库的最终路径  /video/5/merge_xxx.mp4
+        String finalMergeVideoOutputPath = "";//合成视频保存到磁盘的最终路径  D://material/video_space/video/5/merge_xxx.mp4
         String finalCoverUploadPathDB = ""; //视频封面的最终数据库路径
         String finalCoverPath = "";//视频封面的最终磁盘路径
 
@@ -99,6 +99,8 @@ public class VideoInfoServiceImpl implements VideoInfoService{
                     finalMergeUploadPathDB = uploadPathDB + outPutFileName;//合成视频保存到数据库的最终路径
                     finalMergeVideoOutputPath = videoPath + outPutFileName;//合成视频保存到磁盘的最终路径
                     ffmpegUtil.mergeVideoAndAudio(videoInputPath, audioInputPath, dto.getVideoDuration(), finalMergeVideoOutputPath);
+                }else{
+                    finalMergeUploadPathDB = finalUploadPathDB;
                 }
 
                 //截取视频封面
