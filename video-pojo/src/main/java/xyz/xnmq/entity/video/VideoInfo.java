@@ -37,7 +37,7 @@ public class VideoInfo extends AuditAuto{
     @Filed("封面地址")
     private String coverPath;
     @Filed("喜欢数")
-    private Long linkCounts;
+    private Long likeCounts;
     @Filed("状态 0 正常 1 禁播")
     private int status;
     @Filed("是否禁用 0 使用 1 禁用")
@@ -123,12 +123,12 @@ public class VideoInfo extends AuditAuto{
         this.coverPath = coverPath;
     }
 
-    public Long getLinkCounts() {
-        return linkCounts;
+    public Long getLikeCounts() {
+        return likeCounts;
     }
 
-    public void setLinkCounts(Long linkCounts) {
-        this.linkCounts = linkCounts;
+    public void setLikeCounts(Long likeCounts) {
+        this.likeCounts = likeCounts;
     }
 
     public int getStatus() {

@@ -23,10 +23,12 @@ public class Json {
     private static final String ERROR_CODE = "0";                 //获取数据出错状态码
     private static final String PARAM_ERROR_CODE = "0";           //参数传递错误状态码
     private static final String BUSSINESS_ERROR_CODE = "-101";   //业务异常
+    private static final String LOGIN_CODE = "502"; //登陆错误
 
     private static final String SUCCESS_MESSAGE = "请求数据成功!";          //获取数据成功
     private static final String ERROR_MESSAGE = "请求数据出错!";            //获取数据出错
     private static final String PARAM_ERROR_MESSAGE = "请求参数传递错误!"; //参数传递错误
+    private static final String LOGIN_ERROR_MESSAGE = "登陆错误";
 
     private static final String _status = "status";
     private static final String _data = "data";
@@ -87,6 +89,13 @@ public class Json {
 
     public static Json bussinessError(Object data, String msg) {
         return newInstance(BUSSINESS_ERROR_CODE, data, msg);
+    }
+
+    public static Json loginError(){
+        return newInstance(LOGIN_CODE, "", LOGIN_ERROR_MESSAGE);
+    }
+    public static Json loginError(String msg){
+        return newInstance(LOGIN_CODE, "", msg);
     }
 
     public static Json newInstance(String status) {

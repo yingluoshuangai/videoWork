@@ -136,12 +136,12 @@ public class VideoInfoDto {
         videoInfo.setCoverPath(coverPath);
     }
 
-    public Long getLinkCounts() {
-        return videoInfo.getLinkCounts();
+    public Long getLikeCounts() {
+        return videoInfo.getLikeCounts();
     }
 
-    public void setLinkCounts(Long linkCounts) {
-        videoInfo.setLinkCounts(linkCounts);
+    public void setLikeCounts(Long likeCounts) {
+        videoInfo.setLikeCounts(likeCounts);
     }
 
     public int getStatus() {

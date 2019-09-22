@@ -128,7 +128,7 @@ public class VideoInfoServiceImpl implements VideoInfoService{
         BeanUtils.copyProperties(dto, videoInfo);
         videoInfo.setVideoPath(finalMergeUploadPathDB);
         videoInfo.setCoverPath(finalCoverUploadPathDB);
-        videoInfo.setLinkCounts(0L);
+        videoInfo.setLikeCounts(0L);
         videoInfoDao.save(videoInfo);
 
         return Json.success();
