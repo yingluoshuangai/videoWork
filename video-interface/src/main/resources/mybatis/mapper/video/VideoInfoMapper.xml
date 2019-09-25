@@ -6,7 +6,8 @@
         select b.face_image as faceImage, b.username, b.nickname,
         a.id,a.audio_id as audioId, a.cover_path as coverPath,
         a.video_path as videoPath, a.video_width as videoWidth,
-        a.video_height as videoHeight
+        a.video_height as videoHeight, a.user_id as userId,
+        a.video_desc as videoDesc
         from video_info a
         left join users	b on a.user_id = b.id
 	  	where a.disabled = 0
