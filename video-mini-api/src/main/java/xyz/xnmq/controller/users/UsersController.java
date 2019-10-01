@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import xyz.xnmq.inf.users.UserFansService;
 import xyz.xnmq.inf.users.UsersService;
+import xyz.xnmq.inf.users.dto.UserFansDto;
 import xyz.xnmq.json.Json;
 import java.io.IOException;
 import java.util.Objects;
@@ -25,6 +27,8 @@ public class UsersController {
 
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private UserFansService userFansService;
 
     @RequestMapping("uploadFace")
     @ApiOperation(value = "头像上传")
@@ -45,5 +49,46 @@ public class UsersController {
             return Json.error("用户id为空");
         }
         return usersService.findOne(userId);
+    }
+
+    /**
+     * 用户关注
+     * @param dto
+     * @return
+     */
+    @RequestMapping("attention")
+    public Json attention(UserFansDto dto){
+        if(Objects.isNull(dto.getUserId()) || Objects.isNull(dto.getFansId())){
+            return Json.error("信息不正确");
+        }
+        userFansService.attention(dto);
+        return Json.success("用户关注成功");
+    }
+
+    /**
+     * 用户取消关注
+     * @param dto
+     * @return
+     */
+    @RequestMapping("noAttention")
+    public Json noAttention(UserFansDto dto){
+        if(Objects.isNull(dto.getUserId()) || Objects.isNull(dto.getFansId())){
+            return Json.error("信息不正确");
+        }
+        userFansService.noAttention(dto);
+        return Json.success("用户取消关注成功");
+    }
+
+    /**
+     * 是否关注该用户 1 是 0 否
+     * @param dto
+     * @return
+     */
+    @RequestMapping("isFollow")
+    public Json isFollow(UserFansDto dto){
+        if(Objects.isNull(dto.getUserId()) || Objects.isNull(dto.getFansId())){
+            return Json.error("信息不正确");
+        }
+        return Json.success(userFansService.isFollow(dto));
     }
 }
